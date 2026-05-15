@@ -1,0 +1,24 @@
+# env
+.env
+
+# Go build output
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+
+# Go test & coverage
+*.test
+*.out
+coverage.html
+
+# Go module cache
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

@@ -4,6 +4,8 @@ import (
 	"os"
 
 	util_provider "gitea.qwertysystem.net/BETS/ts-utils/provider"
+	util_service "gitea.qwertysystem.net/BETS/ts-utils/service"
+	util_db "gitea.qwertysystem.net/BETS/ts-utils/db"
 	"github.com/CROWNIX/boilerplate-go-v1/internal/user/route"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,7 +25,11 @@ func (a *App) Run(serviceProvider util_provider.ServiceProvider) {
 	a.app.Use(cors.New())
 	a.app.Use(logger.New())
 
-	setupRoute(a.app, serviceProvider)
+	sqlService := serviceProvider.MakePostgreSqlService(
+        util_db.DBName(os.Getenv("DATABASE_NAME")),
+    )
+
+	setupRoute(a.app, sqlService)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -32,6 +38,6 @@ func (a *App) Run(serviceProvider util_provider.ServiceProvider) {
 	a.app.Listen(":" + port)
 }
 
-func setupRoute(app *fiber.App, serviceProvider util_provider.ServiceProvider) {
-	route.SetUpUserController(app, serviceProvider)
+func setupRoute(app *fiber.App, sqlService util_service.PostgreSqlService) {
+	route.SetUpUserController(app, sqlService)
 }

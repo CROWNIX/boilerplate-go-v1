@@ -1,12 +1,11 @@
 package route
 
 import (
-	util_provider "gitea.qwertysystem.net/BETS/ts-utils/provider"
-	"github.com/CROWNIX/boilerplate-go-v1/internal/user/controller"
-	"github.com/CROWNIX/boilerplate-go-v1/internal/user/usecase"
-
 	"time"
 
+	util_service "gitea.qwertysystem.net/BETS/ts-utils/service"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/controller"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/usecase"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,9 +17,12 @@ func SetUpUserRoute(
 	apiGroup.Get("/", userController.GetUserList)
 }
 
-func SetUpUserController(app *fiber.App, serviceProvider util_provider.ServiceProvider) {
+func SetUpUserController(app *fiber.App, sqlService util_service.PostgreSqlService) {
 	timeout := 5 * time.Minute
-	getUserListUseCase := usecase.MakeGetUserListUseCase(serviceProvider)
+
+	
+
+	getUserListUseCase := usecase.MakeGetUserListUseCase(sqlService)
 	userController := controller.MakeUserController(
 		timeout, 
 		getUserListUseCase,

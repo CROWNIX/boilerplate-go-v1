@@ -2,14 +2,15 @@ package usecase
 
 import (
 	"context"
+	"os"
 
 	util_db "gitea.qwertysystem.net/BETS/ts-utils/db"
 	util_functions "gitea.qwertysystem.net/BETS/ts-utils/functions"
 	util_provider "gitea.qwertysystem.net/BETS/ts-utils/provider"
 	util_service "gitea.qwertysystem.net/BETS/ts-utils/service"
 
-	"github.com/CROWNIX/boilerplate-go-v1/internal/module/dto"
-	query_builder "github.com/CROWNIX/boilerplate-go-v1/internal/module/query_builder"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/dto"
+	query_builder "github.com/CROWNIX/boilerplate-go-v1/internal/user/query_builder"
 )
 
 type GetUserListParam struct {
@@ -23,7 +24,7 @@ type GetUserListUseCase struct {
 }
 
 type GetUserListServices struct {
-	FixedAssetService util_service.PostgreSqlService
+	SqlService util_service.PostgreSqlService
 }
 
 func MakeGetUserListUseCase(
@@ -34,25 +35,19 @@ func MakeGetUserListUseCase(
 	}
 }
 
-func (u *GetUserListUseCase) InitService(companyCode string) {}
-
-func (u *GetUserListUseCase) MakeService(companyCode string) GetUserListServices {
-	fixedAssetDbName := util_db.FixedAssetDBName.CompanyDBName(companyCode)
-
+func (u *GetUserListUseCase) MakeService() GetUserListServices {
 	return GetUserListServices{
-		FixedAssetService: u.ServiceProvider.MakePostgreSqlService(fixedAssetDbName),
+		SqlService: u.ServiceProvider.MakePostgreSqlService(util_db.DBName(os.Getenv("DATABASE_NAME"))),
 	}
 }
 
 func (u *GetUserListUseCase) Invoke(param GetUserListParam) (*dto.PaginatedGetUserListResponse, error) {
-	services := u.MakeService(param.CompanyCode)
-
-	var err error
-	var result []dto.PaginatedGetUserListResponse
+	services := u.MakeService()
 
 	queryString, args, err := query_builder.GetUserListBuilder(param.Query)
-
-	err = services.FixedAssetService.SelectMany(
+	
+	var result []dto.PaginatedGetUserListResponse
+	err = services.SqlService.SelectMany(
 		&result,
 		param.Ctx,
 		queryString,

@@ -2,11 +2,12 @@ package route
 
 import (
 	util_provider "gitea.qwertysystem.net/BETS/ts-utils/provider"
-	"github.com/CROWNIX/boilerplate-go-v1/internal/module/delivery/http/controller"
-	"github.com/CROWNIX/boilerplate-go-v1/internal/module/usecase"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/controller"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/usecase"
+
+	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"time"
 )
 
 func SetUpUserRoute(

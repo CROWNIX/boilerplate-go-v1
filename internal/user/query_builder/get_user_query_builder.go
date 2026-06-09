@@ -4,7 +4,7 @@ import (
 	util_db "gitea.qwertysystem.net/BETS/ts-utils/db"
 	util_sql_query "gitea.qwertysystem.net/BETS/ts-utils/sql_query"
 
-	"github.com/CROWNIX/boilerplate-go-v1/internal/module/dto"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/dto"
 )
 
 func GetUserListBuilder(query dto.GetUserQuery) (string, []any, error) {
@@ -29,7 +29,7 @@ func GetUserListBuilder(query dto.GetUserQuery) (string, []any, error) {
 		}
 	}
 
-	return util_sql_query.NewSQLSelectBuilder[dto.UserDB](util_db.AccountCodeModelName, "u").
+	return util_sql_query.NewSQLSelectBuilder[dto.UserDB](util_db.UserTableName, "u").
 		Where(map[string]util_sql_query.SQLCondition{
 			"u.deleted_at": {
 				Operator: util_sql_query.SQLOperatorIsNull,

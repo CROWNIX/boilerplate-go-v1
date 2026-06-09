@@ -4,7 +4,7 @@ import (
 	"os"
 
 	util_provider "gitea.qwertysystem.net/BETS/ts-utils/provider"
-	borrowing_route "github.com/CROWNIX/boilerplate-go-v1/internal/module/delivery/http/route"
+	"github.com/CROWNIX/boilerplate-go-v1/internal/user/route"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -33,5 +33,5 @@ func (a *App) Run(serviceProvider util_provider.ServiceProvider) {
 }
 
 func setupRoute(app *fiber.App, serviceProvider util_provider.ServiceProvider) {
-	borrowing_route.SetUpUserController(app, serviceProvider)
+	route.SetUpUserController(app, serviceProvider)
 }
